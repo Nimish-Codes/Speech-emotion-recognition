@@ -1,0 +1,7 @@
+streamlit
+pickle
+numpy
+librosa
+soundfile
+scikit-learn
+streamlit_audio_recorder
