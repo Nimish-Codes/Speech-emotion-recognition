@@ -43,7 +43,7 @@ st.title('Emotion Detection from Audio')
 
 # File uploader
 audio_file = st.file_uploader("Upload or drag & drop an audio file")
-st.warning("Just wait for result. No button's here.\n\n Upload anything other than audio file to see Error. Thanks!")
+st.warning("Just wait for result. No button's here.\n\n Upload anything other than audio file to see Error. Thanks! \n\nBetter results expected for human voice.")
 
 if audio_file is not None:
     # Predict emotion
