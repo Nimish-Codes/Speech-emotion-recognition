@@ -42,7 +42,7 @@ def predict_emotion(audio_file_path):
 st.title('Emotion Detection from Audio')
 
 # File uploader
-audio_file = st.file_uploader("Upload an audio file")
+audio_file = st.file_uploader("Just upload or drag & drop an audio file then wait for result. No buttons here.")
 
 if audio_file is not None:
     # Predict emotion
