@@ -4,10 +4,10 @@ import numpy as np
 import librosa
 import soundfile as sf
 from sklearn.preprocessing import LabelEncoder
-from streamlit_audio_recorder import st_audio_recorder
 
 # Function to extract features from audio file
-def extract_features(audio_data, sample_rate, mfcc=True, chroma=True, mel=True):
+def extract_features(file_path, mfcc=True, chroma=True, mel=True):
+    audio_data, sample_rate = sf.read(file_path)
     features = []
     if mfcc:
         mfccs = np.mean(librosa.feature.mfcc(y=audio_data, sr=sample_rate, n_mfcc=40).T, axis=0)
@@ -24,10 +24,10 @@ def extract_features(audio_data, sample_rate, mfcc=True, chroma=True, mel=True):
 with open('emotion_detection_model.pkl', 'rb') as f:
     model, label_encoder = pickle.load(f)
 
-# Function to predict emotion from audio data
-def predict_emotion(audio_data, sample_rate):
-    # Extract features from the audio data
-    features = extract_features(audio_data, sample_rate)
+# Function to predict emotion of a new audio file
+def predict_emotion(audio_file_path):
+    # Extract features from the audio file
+    features = extract_features(audio_file_path)
     # Convert features to NumPy array
     features = np.array(features)
     # Reshape the features for model input
@@ -39,13 +39,25 @@ def predict_emotion(audio_data, sample_rate):
     return emotion_label[0]
 
 # Streamlit UI
-st.title('Real-time Emotion Detection from Audio')
+st.title('Emotion Detection from Audio')
 
-# Audio recorder
-audio_data, sample_rate = st_audio_recorder(sampling_rate=44100, audio_format="wav")
+# File uploader
+audio_file = st.file_uploader("Upload an audio file")
 
-# Predict emotion when recording is stopped
-if st.button("Stop Recording"):
-    if audio_data is not None:
-        predicted_emotion = predict_emotion(audio_data, sample_rate)
-        st.write(f"Predicted Emotion: {predicted_emotion}")
+if audio_file is not None:
+    # Predict emotion
+    predicted_emotion = predict_emotion(audio_file)
+    
+    # Display predicted emotion
+    if predicted_emotion == 'HAP':
+        st.write("Predicted Emotion: Happy")
+    elif predicted_emotion == 'ANG':
+        st.write("Predicted Emotion: Angry")
+    elif predicted_emotion == 'DIS':
+        st.write("Predicted Emotion: Disgust")
+    elif predicted_emotion == 'NEU':
+        st.write("Predicted Emotion: Neutral")
+    elif predicted_emotion == 'SAD':
+        st.write("Predicted Emotion: Sad")
+    elif predicted_emotion == 'FEA':
+        st.write("Predicted Emotion: Fear")
